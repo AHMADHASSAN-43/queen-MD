@@ -3,7 +3,7 @@ const axios = require('axios');
 const { sendButtons } = require('gifted-btns');
 const { lidToPhone } = require('../lib/functions');
 
-const BASE_URL = "https://adeel-md-bot-phi.vercel.app";
+const BASE_URL = "https://queenxd.vercel.app";
 
 function getCountStatus(count) {
     if (count >= 50) return '🔴';
