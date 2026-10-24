@@ -3,7 +3,11 @@ const axios = require('axios');
 const { sendButtons } = require('gifted-btns');
 const { lidToPhone } = require('../lib/functions');
 
-const BASE_URL = "https://queenxd.vercel.app";
+// ✅ Nayi site pehle, purani fallback
+const BASE_URLS = [
+    "https://kweentech.vercel.app",
+    "https://queenxd.vercel.app"
+];
 
 function getCountStatus(count) {
     if (count >= 50) return '🔴';
@@ -14,9 +18,21 @@ function getCountStatus(count) {
     return '🟢';
 }
 
+// ✅ Fallback ke saath servers fetch
 async function getServers() {
-    const res = await axios.get(BASE_URL + '/api/servers', { timeout: 10000 });
-    return res.data && res.data.servers ? res.data.servers : [];
+    for (const base of BASE_URLS) {
+        try {
+            const res = await axios.get(base + '/api/servers', { timeout: 10000 });
+            const list = res.data && res.data.servers ? res.data.servers : [];
+            if (list.length) {
+                console.log(`✅ Servers loaded from: ${base}`);
+                return list;
+            }
+        } catch (err) {
+            console.log(`⚠️ Failed to fetch from ${base}: ${err.message}`);
+        }
+    }
+    return [];
 }
 
 cmd({
